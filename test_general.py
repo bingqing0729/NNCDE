@@ -96,8 +96,6 @@ for i in range(N_sim):
     test_data['pred_ch'] = test_data.groupby(['id'])['pred_ch'].cumsum()
     test_data['pred_cdf'] = 1-np.exp(-test_data['pred_ch'])
 
-    
-    test_data.groupby('id').last()['pred_cdf'] = 1 # enforce the last cdf to be 1
 
     lower_bound_90 = test_data[(test_data['pred_cdf']<=0.95) & (test_data['pred_cdf']>=0.05)].groupby(['id']).first()['end']
     upper_bound_90 = test_data[(test_data['pred_cdf']<=0.95) & (test_data['pred_cdf']>=0.05)].groupby(['id']).last()['end']
