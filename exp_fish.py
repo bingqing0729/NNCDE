@@ -186,7 +186,6 @@ for train_index, test_index in kf.split(data):
     df_test_1.loc[df_test_1.groupby('id').head(1).index, 'pred_cdf'] = -np.log(1-1/N_train) # manually set the first cumulative hazard value
     df_test_1['pred_cdf'] = df_test_1.groupby(['id'])['pred_cdf'].cumsum()
     df_test_1['pred_cdf'] = 1-np.exp(-df_test_1['pred_cdf'])
-    df_test_1.groupby('id').last()['pred_cdf'] = 1 # enforce the last cdf to be 1
     pred_y_1_median = df_test_1[df_test_1['pred_cdf']<=0.5].groupby(['id']).last()['end']
     df_test_1['pred_pmf'] = df_test_1.groupby(['id'])['pred_cdf'].diff().fillna(df_test_1['pred_cdf'])
     df_test_1['pred_y'] = df_test_1['pred_pmf']*df_test_1['end']
@@ -204,7 +203,6 @@ for train_index, test_index in kf.split(data):
     df_test_2.loc[df_test_2.groupby('id').head(1).index, 'pred_cdf'] = -np.log(1-1/N_val) # manually set the first cumulative hazard value
     df_test_2['pred_cdf'] = df_test_2.groupby(['id'])['pred_cdf'].cumsum()
     df_test_2['pred_cdf'] = 1-np.exp(-df_test_2['pred_cdf'])
-    df_test_2.groupby('id').last()['pred_cdf'] = 1 # enforce the last cdf to be 1
     pred_y_2_median = df_test_2[df_test_2['pred_cdf']<=0.5].groupby(['id']).last()['end']
     df_test_2['pred_pmf'] = df_test_2.groupby(['id'])['pred_cdf'].diff().fillna(df_test_2['pred_cdf'])
     df_test_2['pred_y'] = df_test_2['pred_pmf']*df_test_2['end']
